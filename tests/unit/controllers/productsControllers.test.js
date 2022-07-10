@@ -2,16 +2,12 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const productController = require('../../../controllers/products');
 const productService = require('../../../services/products');
-
-const mockProducts = [
-  { id: 1, name: 'Martelo de Thor' },
-  { id: 2, name: 'Traje de encolhimento' },
-  { id: 3, name: 'Escudo do Capitão América' },
-];
+const { allProductsResponse } = require('../../../__tests__/_dataMock');
 
 const mockProduct = { id: 1, name: 'Martelo de Thor' };
-
-const mockInvalidId = { message: "Product not found" }
+const mockNewProduct = { id: 4, name: 'PlayStation 5' };
+const mockInvalidId = { message: "Product not found" };
+const mockInvalidProduct = { message: "Product name not acceptable" };
 
 describe('Teste ao chamar o controller de products', () => {
   describe('Quando é solicitado todos os produtos', () => {
@@ -22,7 +18,7 @@ describe('Teste ao chamar o controller de products', () => {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
 
-      sinon.stub(productService, 'getAll').resolves(mockProducts);
+      sinon.stub(productService, 'getAll').resolves(allProductsResponse);
     });
 
     after(() => {
@@ -39,7 +35,7 @@ describe('Teste ao chamar o controller de products', () => {
 
     it('é chamado o json com todos os produtos', async () => {
       await productController.getAll(req, res);
-      expect(res.json.calledWith(mockProducts)).to.be.equal(true);
+      expect(res.json.calledWith(allProductsResponse)).to.be.equal(true);
     });
   });
     
@@ -100,6 +96,66 @@ describe('Teste ao chamar o controller de products', () => {
     it('é chamado o json com o produto', async () => {
       await productController.getById(req, res);
       expect(res.json.calledWith(mockInvalidId)).to.be.equal(true);
+    });
+  });
+
+  describe('Quando é solicitado criar um novo produto com nome válido', () => {
+    const req = {};
+    const res = {};
+
+    before(() => {
+      req.body = {
+        name: 'Playstation',
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'addProduct').resolves(mockNewProduct);
+    });
+
+    after(() => {
+      productService.addProduct.restore();
+    });
+
+    it('é chamado o status com o código 201', async () => {
+      await productController.addProduct(req, res);
+      expect(res.status.calledWith(201)).to.be.equal(true);
+    });
+
+    it('é chamado o json com o produto', async () => {
+      await productController.addProduct(req, res);
+      expect(res.json.calledWith(mockNewProduct)).to.be.equal(true);
+    });
+  });
+
+  describe('Quando é solicitado criar um produto com nome inválido', () => {
+    const req = {};
+    const res = {};
+  
+    before(() => {
+      req.body = {
+        name: 526,
+      };
+  
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+  
+      sinon.stub(productService, 'addProduct').resolves(null);
+    });
+  
+    after(() => {
+      productService.addProduct.restore();
+    });
+  
+    it('é chamado o status com o código 406', async () => {
+      await productController.addProduct(req, res);
+      expect(res.status.calledWith(406)).to.be.equal(true);
+    });
+  
+    it('é chamado o json com o produto', async () => {
+      await productController.addProduct(req, res);
+      expect(res.json.calledWith(mockInvalidProduct)).to.be.equal(true);
     });
   });
 });

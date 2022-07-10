@@ -22,7 +22,7 @@
     "method": "GET",
     "sortNum": 0,
     "created": "2022-07-10T14:26:24.979Z",
-    "modified": "2022-07-10T18:20:06.171Z",
+    "modified": "2022-07-10T19:14:56.367Z",
     "headers": [],
     "params": [],
     "tests": []
@@ -50,12 +50,12 @@
     "method": "POST",
     "sortNum": 0,
     "created": "2022-07-10T14:26:55.198Z",
-    "modified": "2022-07-10T18:19:42.201Z",
+    "modified": "2022-07-10T18:38:54.713Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n    \"name\": \"dksg\"\n}",
+      "raw": "{\n    \"name\": 5\n}",
       "form": []
     },
     "tests": []
