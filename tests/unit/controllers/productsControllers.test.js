@@ -11,6 +11,8 @@ const mockProducts = [
 
 const mockProduct = { id: 1, name: 'Martelo de Thor' };
 
+const mockInvalidId = { message: "Product not found" }
+
 describe('Teste ao chamar o controller de products', () => {
   describe('Quando é solicitado todos os produtos', () => {
     const req = {};
@@ -41,13 +43,13 @@ describe('Teste ao chamar o controller de products', () => {
     });
   });
     
-  describe('Quando é solicitado um produto pelo id', () => {
+  describe('Quando é solicitado um produto pelo id válido', () => {
     const req = {};
     const res = {};
     
     before(() => {
       req.params = {
-        id: 2,
+        id: 1,
       };
 
       res.status = sinon.stub().returns(res);
@@ -68,6 +70,36 @@ describe('Teste ao chamar o controller de products', () => {
     it('é chamado o json com o produto', async () => {
       await productController.getById(req, res);
       expect(res.json.calledWith(mockProduct)).to.be.equal(true);
+    });
+  });
+
+  describe('Quando é solicitado um produto pelo id inválido', () => {
+    const req = {};
+    const res = {};
+
+    before(() => {
+      req.params = {
+        id: 4,
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'getById').resolves(null);
+    });
+
+    after(() => {
+      productService.getById.restore();
+    });
+
+    it('é chamado o status com o código 404', async () => {
+      await productController.getById(req, res);
+      expect(res.status.calledWith(404)).to.be.equal(true);
+    });
+
+    it('é chamado o json com o produto', async () => {
+      await productController.getById(req, res);
+      expect(res.json.calledWith(mockInvalidId)).to.be.equal(true);
     });
   });
 });
