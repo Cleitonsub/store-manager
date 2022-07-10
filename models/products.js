@@ -11,6 +11,7 @@ const getById = async (id) => {
   const [[rows]] = await connection.execute(
     'SELECT * FROM products WHERE id = ?', [id],
   );
+  if (!rows) return null;
   return rows;
 };
 
