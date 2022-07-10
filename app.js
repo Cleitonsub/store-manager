@@ -1,8 +1,12 @@
 const express = require('express');
 const helmet = require('helmet');
+const router = require('./routers');
 
 const app = express();
+
+app.use(express.json());
 app.use(helmet());
+app.use('/products', router.productsRouter);
 
 // não remova esse endpoint, é para o avaliador funcionar
 app.get('/', (_request, response) => {
