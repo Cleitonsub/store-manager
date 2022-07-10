@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const productModel = require('../../../services/products');
+const productModel = require('../../../models/products');
 
 const mockProducts = [
   { id: 1, name: 'Martelo de Thor' },
