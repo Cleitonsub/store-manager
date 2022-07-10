@@ -5,11 +5,12 @@ const {
   getById,
   addProduct,
 } = require('../controllers/products');
+const productValidation = require('../middlewares/productValidation');
 
 const router = express.Router();
 
 router.get('/', getAll);
-router.post('/', addProduct);
+router.post('/', productValidation, addProduct);
 router.get('/:id', getById);
 
 module.exports = router;
