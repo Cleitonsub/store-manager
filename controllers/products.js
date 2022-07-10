@@ -1,7 +1,9 @@
 const productService = require('../services/products');
 const {
-  OK,
+  CREATED,
+  NOT_ACCEPTABLE,
   NOT_FOUND,
+  OK,
 } = require('../helpers/httpStatusCode');
 
 const getAll = async (_req, res) => {
@@ -19,7 +21,18 @@ const getById = async (req, res) => {
   res.status(OK).json(products);
 };
 
+const addProduct = async (req, res) => {
+  const { name } = req.body;
+
+  const product = await productService.addProduct(name);
+
+  if (!product) return res.status(NOT_ACCEPTABLE).json({ message: 'Product name not acceptable' });
+
+  res.status(CREATED).json(product);
+};
+
 module.exports = {
   getAll,
   getById,
+  addProduct,
 };
