@@ -8,8 +8,6 @@ const {
   productCreateResponse,
 } = require('../../../__tests__/_dataMock');
 
-const mockProduct = { id: 1, name: 'Martelo de Thor' };
-
 describe('Teste ao chamar o service de products', () => {
   describe('Quando é solicitado todos os produtos', () => {
     before(() => {
@@ -41,26 +39,20 @@ describe('Teste ao chamar o service de products', () => {
   });
 
   describe('Quando é solicitado um produto pelo id inválido', () => {
-    before(() => {
-      sinon.stub(productService, 'getById').resolves(null);
-    });
-
-    after(() => {
-      productService.getById.restore();
-    });
-
     it('é chamado com um id inválido', async () => {
+      sinon.stub(productService, 'getById').resolves(null);
       const res = await productService.getById(4);
       expect(res).to.be.null;
+      productService.getById.restore();
     });
   });
 
   describe('Quando é solicitado criar um novo produto', () => {
-    beforeEach(() => {
+    before(() => {
       sinon.stub(productModel, 'addProduct').resolves(productCreateResponse);
     });
 
-    afterEach(() => {
+    after(() => {
       productModel.addProduct.restore();
     });
     
@@ -71,7 +63,7 @@ describe('Teste ao chamar o service de products', () => {
 
     it('com o nome inválido', async () => {
       const res = await productService.addProduct(564);
-      const res2 = await productService.addProduct('')
+      const res2 = await productService.addProduct(false);
       expect(res).to.be.null;
       expect(res2).to.be.null;
     });

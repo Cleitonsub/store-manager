@@ -28,8 +28,10 @@ describe('Teste ao chamar o model de products', () => {
 
   describe('Quando é solicitado um produto pelo id', () => {
     it('é chamado com um id válido', async () => {
+      sinon.stub(productModel, 'getById').resolves(allProductsResponse[0]);
       const res = await productModel.getById(1);
       expect(res).to.be.deep.equal(productSearchNameResponse[0]);
+      productModel.getById.restore();
     });
 
     it('é chamado com um id inválido', async () => {
