@@ -40,10 +40,10 @@ describe('Teste ao chamar o service de products', () => {
 
   describe('Quando é solicitado um produto pelo id inválido', () => {
     it('é chamado com um id inválido', async () => {
-      sinon.stub(productService, 'getById').resolves(null);
+      sinon.stub(productModel, 'getById').resolves(false);
       const res = await productService.getById(4);
       expect(res).to.be.null;
-      productService.getById.restore();
+      productModel.getById.restore();
     });
   });
 

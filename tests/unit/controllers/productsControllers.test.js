@@ -4,7 +4,6 @@ const productController = require('../../../controllers/products');
 const productService = require('../../../services/products');
 const { allProductsResponse } = require('../../../__tests__/_dataMock');
 
-const mockProduct = { id: 1, name: 'Martelo de Thor' };
 const mockNewProduct = { id: 4, name: 'PlayStation 5' };
 const mockInvalidId = { message: "Product not found" };
 const mockInvalidProduct = { message: "Product name not acceptable" };
@@ -51,7 +50,7 @@ describe('Teste ao chamar o controller de products', () => {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
 
-      sinon.stub(productService, 'getById').resolves(mockProduct);
+      sinon.stub(productService, 'getById').resolves(allProductsResponse[0]);
     });
 
     after(() => {
@@ -65,7 +64,7 @@ describe('Teste ao chamar o controller de products', () => {
 
     it('é chamado o json com o produto', async () => {
       await productController.getById(req, res);
-      expect(res.json.calledWith(mockProduct)).to.be.equal(true);
+      expect(res.json.calledWith(allProductsResponse[0])).to.be.equal(true);
     });
   });
 
