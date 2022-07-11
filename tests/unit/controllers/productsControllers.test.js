@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const productController = require('../../../controllers/products');
 const productService = require('../../../services/products');
+const productModel = require('../../../models/products');
 const { allProductsResponse } = require('../../../__tests__/_dataMock');
 
 const mockNewProduct = { id: 4, name: 'PlayStation 5' };
@@ -155,6 +156,25 @@ describe('Teste ao chamar o controller de products', () => {
     it('é chamado o json com o produto', async () => {
       await productController.addProduct(req, res);
       expect(res.json.calledWith(mockInvalidProduct)).to.be.equal(true);
+    });
+  });
+
+  describe('Quando é solicitado deletar um produto pelo id', () => {
+    const req = {};
+    const res = {};
+
+    before(() => {
+      req.params = {
+        id: 1,
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.end = sinon.stub().returns();
+    });
+
+    it('é chamado o status com o código 204', async () => {
+      await productController.delProductById(req, res);
+      expect(res.status.calledWith(204)).to.be.equal(true);
     });
   });
 });
