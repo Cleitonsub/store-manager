@@ -1,6 +1,8 @@
 const productService = require('../services/products');
+const productModel = require('../models/products');
 const {
   CREATED,
+  NO_CONTENT,
   NOT_ACCEPTABLE,
   NOT_FOUND,
   OK,
@@ -31,8 +33,17 @@ const addProduct = async (req, res) => {
   res.status(CREATED).json(product);
 };
 
+const delProductById = async (req, res) => {
+  const { id } = req.params;
+  
+  await productModel.delProductById(id);
+
+  return res.status(NO_CONTENT).end();
+};
+
 module.exports = {
   getAll,
   getById,
   addProduct,
+  delProductById,
 };
